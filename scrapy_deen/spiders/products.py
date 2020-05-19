@@ -27,8 +27,8 @@ class ProductsSpider(scrapy.Spider):
 
         # enable pipelines
         'ITEM_PIPELINES': {
-            'scrapy.pipelines.images.ImagesPipeline': 1,
-            'scrapy_deen.pipelines.SQLPipeline': 2
+            'scrapy.pipelines.images.ImagesPipeline': 1, # enables image pipeline
+            # 'scrapy_deen.pipelines.SQLPipeline': 2 # enables sql pipeline
         },
 
         # log config 
