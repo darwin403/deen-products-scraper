@@ -27,11 +27,11 @@ class ProductsSpider(scrapy.Spider):
 
         # enable pipelines
         'ITEM_PIPELINES': {
-            'scrapy.pipelines.images.ImagesPipeline': 1, # enables image pipeline
-            # 'scrapy_deen.pipelines.SQLPipeline': 2 # enables sql pipeline
+            'scrapy_deen.pipelines.MyImagesPipeline': 100,  # enables image pipeline
+            # 'scrapy_deen.pipelines.SQLPipeline': 200 # enables sql pipeline
         },
 
-        # log config 
+        # log config
         "LOG_LEVEL": 'ERROR',
         "LOG_FILE": 'logs/results.log'
     }
@@ -42,6 +42,7 @@ class ProductsSpider(scrapy.Spider):
             'a.c-categorylist__link::attr(href)').getall()
         for category_link in category_links:
             yield response.follow(category_link+'?items=10000', self.parse_products)
+            # break
 
     # parse product items
     def parse_products(self, response):
@@ -66,3 +67,4 @@ class ProductsSpider(scrapy.Spider):
                 "link": "https://www.deen.nl%s" % product_link if product_link else None,
                 "image_urls": ["https://www.deen.nl%s" % product_image] if product_image else []
             }
+            # break

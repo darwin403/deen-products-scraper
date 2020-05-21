@@ -58,8 +58,8 @@ You can enable and disable various pipelines through `scrapy_deen/spiders/produc
 # scrapy_deen/spiders/products.py
 
 "ITEM_PIPELINES": {
-   'scrapy.pipelines.images.ImagesPipeline':1 # enables images pipeline
-   'scrapy_deen.pipelines.SQLPipeline':2 # enables sql pipeline
+   'scrapy_deen.pipelines.MyImagesPipeline': 100, # enables images pipeline
+   'scrapy_deen.pipelines.SQLPipeline': 200 # enables sql pipeline
 }
 ```
 

@@ -8,6 +8,10 @@
 
 import pyodbc
 import json
+import os
+from urllib.parse import urlparse
+from scrapy.pipelines.images import ImagesPipeline
+from scrapy.http import Request
 
 
 class SQLPipeline(object):
@@ -82,3 +86,21 @@ class SQLPipeline(object):
         """.format(database=self.database, table=self.table, id=product["id"], title=product["title"], category=product["category"], price=product["price"], link=product["link"], image_urls=json.dumps(product["image_urls"]), images=json.dumps(product["images"])))
 
         return product
+
+
+class MyImagesPipeline(ImagesPipeline):
+    # pass item id down into request
+    def get_media_requests(self, item, info):
+        return [Request(x, meta={'item': item}) for x in item.get(self.images_urls_field, [])]
+
+    # custom downloaded image filename
+    def file_path(self, request, response=None, info=None):
+        item = request.meta['item']
+        if item['id']:
+            image_path = urlparse(request.url).path.split('/')[-1]
+            image_ext = os.path.splitext(image_path)[1]
+            image_location = str(item['id']) + image_ext
+            return image_location
+        else:
+            image_guid = request.url.split('/')[-1]
+            return 'full/%s' % (image_guid)
